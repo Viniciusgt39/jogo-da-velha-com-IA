@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jogo da Velha</title>
+  <style>
+    body {
+      background-color: purple;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 300px;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      background-color: blue;
+      border: 1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: yellow;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="color: yellow;">Jogo da Velha</h1>
+
+  <div class="board">
+    <div class="cell" onclick="makeMove(0)"></div>
+    <div class="cell" onclick="makeMove(1)"></div>
+    <div class="cell" onclick="makeMove(2)"></div>
+    <div class="cell" onclick="makeMove(3)"></div>
+    <div class="cell" onclick="makeMove(4)"></div>
+    <div class="cell" onclick="makeMove(5)"></div>
+    <div class="cell" onclick="makeMove(6)"></div>
+    <div class="cell" onclick="makeMove(7)"></div>
+    <div class="cell" onclick="makeMove(8)"></div>
+  </div>
+
+  <script>
+    // Array para armazenar o estado do tabuleiro
+    var board = ['', '', '', '', '', '', '', '', ''];
+    // Variável para controlar o jogador atual
+    var currentPlayer = 'X';
+
+    // Função chamada quando um movimento é feito
+    function makeMove(index) {
+      // Verifica se a célula está vazia
+      if (board[index] === '') {
+        // Define o jogador atual na célula
+        board[index] = currentPlayer;
+        // Atualiza o texto da célula no tabuleiro
+        document.getElementsByClassName('cell')[index].textContent = currentPlayer;
+        // Verifica se o jogador atual venceu
+        if (checkWin(currentPlayer)) {
+          alert('Jogador ' + currentPlayer + ' venceu!');
+          resetBoard();
+          return;
+        }
+        // Verifica se o jogo terminou em empate
+        if (board.indexOf('') === -1) {
+          alert('O jogo terminou em empate!');
+          resetBoard();
+          return;
+        }
+        // Alterna para o próximo jogador
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+      }
+    }
+
+    // Função para verificar se um jogador venceu
+    function checkWin(player) {
+      var winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colunas
+        [0, 4, 8], [2, 4, 6] // Diagonais
+      ];
+      for (var i = 0; i < winningCombinations.length; i++) {
+        var [a, b, c] = winningCombinations[i];
+        if (board[a] === player && board[b] === player && board[c] === player) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Função para reiniciar o jogo
+    function resetBoard() {
+      board = ['', '', '', '', '', '', '', '', ''];
+      currentPlayer = 'X';
+      var cells = document.getElementsByClassName('cell');
+      for (var i = 0; i < cells.length; i++) {
+        cells[i].textContent = '';
+      }
+    }
+  </script>
+</body>
+</html>
